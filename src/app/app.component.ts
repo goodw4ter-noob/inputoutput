@@ -1,22 +1,41 @@
-import { Component } from '@angular/core';
-import { STUDENTS } from './mock-students';
-import { Student } from './types';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { map, Observable, Subscription } from 'rxjs';
+import { CountriesService } from './countries.service';
+import { CountryMapperService } from './country-mapper.service';
+import { CountryResponseModel } from './model/country-response.model';
+import { CountryModel } from './model/country.model';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
 })
-export class AppComponent {
-  students: Student[] = STUDENTS;
+// export class AppComponent implements OnInit, OnDestroy {
+export class AppComponent implements OnInit {
+  // countries!: CountryModel[];
+  countries$!: Observable<CountryModel[]>;
+  // countrySubscription!: Subscription;
+  constructor(
+    private countriesService: CountriesService,
+    private countryMapperService: CountryMapperService
+    ) {};
 
-  changeName(newStudent: Student): void {
-    console.log(newStudent);
-    for (let i = 0; i < this.students.length; i++) {
-      if (this.students[i].id === newStudent.id) {
-        this.students[i].name = newStudent.name;
-        break;
-      }
-    };
+  // ngOnDestroy(): void {
+  //   this.countrySubscription?.unsubscribe();
+  // }
+
+  // ngOnInit(): void {
+  //   this.countriesService
+  //     .get()
+  //     .subscribe((countries: CountryResponseModel[]) => {
+  //       this.countries = this.toClient(countries);
+  //     });
+  // }
+
+  ngOnInit(): void {
+    this.countries$ = this.countriesService
+      .get()
+      .pipe(map((countries) => this.countryMapperService.toClient(countries)));
   }
+
 }

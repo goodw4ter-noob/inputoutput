@@ -1,4 +1,4 @@
-<div class="container mt-6">
+<!-- <div class="container mt-6">
   <div class="students_list mt-6">
     <h2 class="subtitle">Список студентов:</h2>
     <ul class="list" *ngFor="let student of students">
@@ -6,4 +6,10 @@
         <app-input [student]="student" (editedName)="changeName($event)" ></app-input>
     </ul>
   </div>
-</div>
+</div> -->
+
+<ul>
+  <li *ngFor="let country of countries$ | async" > <!-- async is a pipe -->
+     {{country.name}} {{country.code}} {{country.capital}}
+  </li>
+</ul>
